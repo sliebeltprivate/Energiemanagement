@@ -126,7 +126,7 @@
       <form id="form" class="grid-form">
         <label>Ladeleistung (kW)
           <select name="ladeleistung_kw">
-            {% for kw in [2.3, 11, 22] %}
+            {% for kw in [2.3, 11] %}
             <option value="{{ kw }}" {% if kw == std.ladeleistung_kw %}selected{% endif %}>{{ kw }} kW</option>
             {% endfor %}
           </select>
