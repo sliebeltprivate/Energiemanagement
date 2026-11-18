@@ -140,11 +140,19 @@
         <label>Anzahl Nächte (1–7)
           <input name="tage" inputmode="numeric" value="{{ std.tage }}">
         </label>
-        <label>Fenster von (Stunde)
-          <input name="fenster_start" inputmode="numeric" value="{{ std.fenster_start }}">
+        <label>Fenster von
+          <select name="fenster_start">
+            {% for h in range(24) %}
+            <option value="{{ h }}" {% if h == std.fenster_start %}selected{% endif %}>{{ "%02d" % h }} Uhr</option>
+            {% endfor %}
+          </select>
         </label>
-        <label>Fenster bis (Stunde)
-          <input name="fenster_ende" inputmode="numeric" value="{{ std.fenster_ende }}">
+        <label>Fenster bis
+          <select name="fenster_ende">
+            {% for h in range(24) %}
+            <option value="{{ h }}" {% if h == std.fenster_ende %}selected{% endif %}>{{ "%02d" % h }} Uhr</option>
+            {% endfor %}
+          </select>
         </label>
         <button class="btn" type="submit">Neu berechnen</button>
       </form>
