@@ -137,8 +137,12 @@
         <label>Sockel brutto (ct/kWh)
           <input name="sockel_ct" inputmode="decimal" value="{{ std.sockel_ct }}">
         </label>
-        <label>Anzahl Nächte (1–7)
-          <input name="tage" inputmode="numeric" value="{{ std.tage }}">
+        <label>Anzahl Nächte
+          <select name="tage">
+            {% for n in range(1, 8) %}
+            <option value="{{ n }}" {% if n == std.tage %}selected{% endif %}>{{ n }} {% if n == 1 %}Nacht{% else %}Nächte{% endif %}</option>
+            {% endfor %}
+          </select>
         </label>
         <label>Fenster von
           <select name="fenster_start">
