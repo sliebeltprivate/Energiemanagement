@@ -5,7 +5,7 @@ Zeigt die günstigsten Ladefenster der nächsten Nächte. Alle Werte (Ladeleistu
 ## Einrichten (einmalig, im Terminal)
 
 ```bash
-cd "/Users/sliebelt/Projects/Energiemanagement"
+cd "<pfad-zum-repository>"
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 ```
@@ -13,7 +13,7 @@ python3 -m venv .venv
 ## Starten
 
 ```bash
-cd "/Users/sliebelt/Projects/Energiemanagement"
+cd "<pfad-zum-repository>"
 .venv/bin/python app.py
 ```
 
@@ -24,7 +24,7 @@ cd "/Users/sliebelt/Projects/Energiemanagement"
   ipconfig getifaddr en0
   ```
 
-  Dann auf dem iPhone in Safari `http://<IP>:5055` öffnen (z. B. `http://192.168.178.93:5055`).
+  Dann auf dem iPhone in Safari `http://<IP>:5055` öffnen (z. B. `http://192.168.x.x:5055`).
 - **Als App auf dem iPhone:** In Safari unten auf Teilen → „Zum Home-Bildschirm“. Danach startet sie wie eine App.
 
 Die App läuft nur, solange das Terminal mit `app.py` offen ist (bzw. der Mac nicht schläft).
@@ -56,7 +56,7 @@ Die Backtest-Zahl (4,7 ct) ist daher zu optimistisch. Die App zeigt den Out-of-s
 **Modell neu trainieren** (z. B. alle paar Wochen, mit aktuellen Daten):
 
 ```bash
-cd "/Users/sliebelt/Projects/Energiemanagement"
+cd "<pfad-zum-repository>"
 .venv/bin/python train.py
 ```
 
@@ -81,18 +81,10 @@ Warnungen stehen in `warnungen.log`, werden in der App rot angezeigt und ergeben
 **Einmal manuell ausführen:**
 
 ```bash
-cd "/Users/sliebelt/Projects/Energiemanagement"
+cd "<pfad-zum-repository>"
 .venv/bin/python tagesjob.py
 ```
 
-**Täglich automatisch (macOS, 15:00):** Die Datei `com.ladeplanung.tagesjob.plist` ist eine Vorlage. Sie wird mit diesen Befehlen eingerichtet:
-
-```bash
-cp "/Users/sliebelt/Projects/Energiemanagement/com.ladeplanung.tagesjob.plist" ~/Library/LaunchAgents/
-launchctl load ~/Library/LaunchAgents/com.ladeplanung.tagesjob.plist
-```
-
-Voraussetzung: Der Mac ist um 15:00 eingeschaltet (läuft er nicht, holt launchd den Lauf beim nächsten Aufwachen nach). Entfernen geht mit `launchctl unload` und dem Löschen der Kopie.
 
 **Wichtig zur Güte:** Die 6-Monats- und 1-Jahres-Werte füllen sich erst mit der Zeit. Am Anfang zeigt die App den Hinweis „nur X Tage“. Die Auswertung nutzt alle Vorhersagen (1–8 Tage Vorlauf).
 
