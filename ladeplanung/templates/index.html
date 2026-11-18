@@ -64,6 +64,7 @@
       padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
       background: var(--bg); color: var(--text); width: 100%;
     }
+    input[type=range] { padding: 0; accent-color: var(--accent); }
     .btn {
       grid-column: 1 / -1; font: inherit; font-weight: 600; font-size: 1rem;
       padding: 12px; border: 0; border-radius: 12px; background: var(--accent);
@@ -131,8 +132,10 @@
             {% endfor %}
           </select>
         </label>
-        <label>Preisgrenze brutto (ct/kWh)
-          <input name="preisgrenze_ct" inputmode="decimal" value="{{ std.preisgrenze_ct }}">
+        <label>Preisgrenze brutto: <b id="preis-anzeige">{{ "%.1f"|format(std.preisgrenze_ct) }}</b> ct/kWh
+          <input type="range" name="preisgrenze_ct" min="20" max="50" step="0.1"
+                 value="{{ std.preisgrenze_ct }}"
+                 oninput="document.getElementById('preis-anzeige').textContent = Number(this.value).toFixed(1)">
         </label>
         <label>Sockel brutto (ct/kWh)
           <input name="sockel_ct" inputmode="decimal" value="{{ std.sockel_ct }}">
