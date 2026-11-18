@@ -270,6 +270,8 @@ def berechne_plan(
             "stunden": round(gesamt_std, 1),
             "kwh": round(gesamt_kwh, 1),
             "kosten_eur": round(gesamt_eur, 2),
+            # Ø Preis über alle geplanten Ladestunden, gewichtet nach kWh (ct/kWh brutto)
+            "preis_ct": round(gesamt_eur / gesamt_kwh * 100, 1) if gesamt_kwh > 0 else None,
         },
         "intervall_min": round(delta_h * 60, 1),
     }

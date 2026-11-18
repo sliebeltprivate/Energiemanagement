@@ -72,7 +72,7 @@
     }
     .btn:active { opacity: 0.8; }
     .btn:disabled { opacity: 0.5; }
-    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; text-align: center; }
     .summary .wert { font-size: 1.35rem; font-weight: 700; }
     .summary .lbl { font-size: 0.75rem; color: var(--muted); }
     .meta { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
@@ -224,6 +224,7 @@
           <div><div class="wert">${fmt(d.gesamt.kwh, 1)}</div><div class="lbl">kWh gesamt</div></div>
           <div><div class="wert">${fmt(d.gesamt.stunden, 1)} h</div><div class="lbl">Ladezeit</div></div>
           <div><div class="wert">${fmt(d.gesamt.kosten_eur)} €</div><div class="lbl">Kosten ca.</div></div>
+          <div><div class="wert">${d.gesamt.preis_ct !== null ? fmt(d.gesamt.preis_ct, 1) + " ct" : "–"}</div><div class="lbl">Ø Preis pro kWh</div></div>
         </div>
         <div class="meta">
           Fenster ${p.fenster_start}–${p.fenster_ende} Uhr · &lt; ${fmt(p.preisgrenze_ct, 1)} ct brutto
