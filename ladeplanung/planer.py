@@ -23,7 +23,7 @@ TZ = ZoneInfo(ZEITZONE)
 
 # Standardwerte (können in der Oberfläche überschrieben werden)
 STANDARD = {
-    "ladeleistung_kw": 2.3,       # 2.3 kW (10A Ladeziegel) oder z.B. 11.0 kW (Wallbox)
+    "ladeleistung_kw": 11.0,       # 2.3 kW (10A Ladeziegel) oder z.B. 11.0 kW (Wallbox)
     "preisgrenze_ct": 36.0,       # max. Ladekosten in ct/kWh brutto
     "sockel_ct": 19.5,            # fixe Netzentgelte, Steuern, Umlagen & Marge (brutto)
     "fenster_start": 22,          # Beginn Ladefenster (Stunde)

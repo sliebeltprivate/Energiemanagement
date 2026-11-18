@@ -1,5 +1,5 @@
 name: Ladeplanung
-version: "1.0.3"
+version: "1.0.4"
 slug: ladeplanung
 description: Günstigste Ladefenster und Prognosegüte für die Wallbox
 arch:
