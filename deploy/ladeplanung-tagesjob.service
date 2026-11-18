@@ -1,0 +1,10 @@
+[Unit]
+Description=Ladeplanung Tagesjob (Prognose speichern und Güte prüfen)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=pi
+WorkingDirectory=/home/pi/Energiemanagement
+ExecStart=/home/pi/Energiemanagement/.venv/bin/python tagesjob.py

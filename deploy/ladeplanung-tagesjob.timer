@@ -1,0 +1,10 @@
+[Unit]
+Description=Ladeplanung Tagesjob täglich 15:00
+
+[Timer]
+OnCalendar=*-*-* 15:00:00
+Persistent=true
+Unit=ladeplanung-tagesjob.service
+
+[Install]
+WantedBy=timers.target

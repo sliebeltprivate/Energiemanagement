@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ladeplan">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#1f6feb">
+  <title>Ladeplanung</title>
+  <style>
+    :root {
+      --bg: #f4f6fa;
+      --card: #ffffff;
+      --text: #1b2330;
+      --muted: #6b7587;
+      --accent: #1f6feb;
+      --good: #1a7f4b;
+      --good-bg: #e3f6ea;
+      --bad: #b42318;
+      --border: #dfe4ec;
+      --radius: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0f141c;
+        --card: #1a212c;
+        --text: #e8edf5;
+        --muted: #97a3b6;
+        --accent: #4d8dff;
+        --good: #5fd39a;
+        --good-bg: #173325;
+        --bad: #ff8a80;
+        --border: #2a3342;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0f141c; --card: #1a212c; --text: #e8edf5; --muted: #97a3b6;
+      --accent: #4d8dff; --good: #5fd39a; --good-bg: #173325; --bad: #ff8a80; --border: #2a3342;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-text-size-adjust: 100%;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 16px 16px 40px; }
+    header h1 { font-size: 1.5rem; margin: 8px 0 2px; }
+    header p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; margin-top: 14px;
+    }
+    details summary { cursor: pointer; font-weight: 600; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after { content: "▾"; float: right; color: var(--muted); }
+    details[open] summary::after { content: "▴"; }
+    .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+    label { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--muted); gap: 4px; }
+    input {
+      font: inherit; font-size: 16px; /* 16px verhindert Zoom auf iPhone */
+      padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--bg); color: var(--text); width: 100%;
+    }
+    .btn {
+      grid-column: 1 / -1; font: inherit; font-weight: 600; font-size: 1rem;
+      padding: 12px; border: 0; border-radius: 12px; background: var(--accent);
+      color: #fff; cursor: pointer;
+    }
+    .btn:active { opacity: 0.8; }
+    .btn:disabled { opacity: 0.5; }
+    .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+    .summary .wert { font-size: 1.35rem; font-weight: 700; }
+    .summary .lbl { font-size: 0.75rem; color: var(--muted); }
+    .meta { font-size: 0.8rem; color: var(--muted); margin-top: 10px; }
+    .nacht { display: flex; flex-direction: column; gap: 8px; }
+    .nacht-kopf { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .nacht-kopf h2 { font-size: 1rem; margin: 0; }
+    .kpis { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.9rem; }
+    .kpis b { font-weight: 700; }
+    .badge {
+      font-size: 0.72rem; padding: 3px 8px; border-radius: 999px;
+      background: var(--border); color: var(--muted); white-space: nowrap;
+    }
+    .bloecke { display: flex; flex-wrap: wrap; gap: 6px; }
+    .block {
+      background: var(--good-bg); color: var(--good); font-weight: 600;
+      padding: 5px 10px; border-radius: 9px; font-size: 0.9rem;
+    }
+    .leer { color: var(--muted); font-size: 0.9rem; }
+    .fehler {
+      background: var(--card); border: 1px solid var(--bad); color: var(--bad);
+      border-radius: var(--radius); padding: 14px; margin-top: 14px;
+    }
+    .spinner { color: var(--muted); text-align: center; padding: 24px 0; }
+    .guete-titel { font-size: 1rem; margin: 0 0 10px; }
+    .guete-tabelle table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .guete-tabelle th, .guete-tabelle td { text-align: right; padding: 6px 4px; border-bottom: 1px solid var(--border); }
+    .guete-tabelle th:first-child, .guete-tabelle td:first-child { text-align: left; }
+    .guete-tabelle th { color: var(--muted); font-weight: 500; font-size: 0.78rem; }
+    .guete-tabelle .teil { color: var(--muted); font-size: 0.75rem; }
+    .warnung {
+      border: 1px solid var(--bad); color: var(--bad); border-radius: 10px;
+      padding: 10px 12px; margin-bottom: 12px; font-size: 0.9rem;
+    }
+    .warnung ul { margin: 6px 0 0 18px; padding: 0; }
+    .hinweis { font-size: 0.78rem; color: var(--muted); line-height: 1.4; margin-top: 14px; }
+    @media (max-width: 420px) {
+      .summary .wert { font-size: 1.15rem; }
+      .grid-form { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Ladeplanung</h1>
+    <p>Günstigste Ladefenster · Quickborn (25451) · Rabot Energy</p>
+  </header>
+
+  <section class="card">
+    <details id="einstellungen">
+      <summary>Einstellungen</summary>
+      <form id="form" class="grid-form">
+        <label>Ladeleistung (kW)
+          <input name="ladeleistung_kw" inputmode="decimal" value="{{ std.ladeleistung_kw }}">
+        </label>
+        <label>Preisgrenze brutto (ct/kWh)
+          <input name="preisgrenze_ct" inputmode="decimal" value="{{ std.preisgrenze_ct }}">
+        </label>
+        <label>Sockel brutto (ct/kWh)
+          <input name="sockel_ct" inputmode="decimal" value="{{ std.sockel_ct }}">
+        </label>
+        <label>Anzahl Nächte (1–7)
+          <input name="tage" inputmode="numeric" value="{{ std.tage }}">
+        </label>
+        <label>Fenster von (Stunde)
+          <input name="fenster_start" inputmode="numeric" value="{{ std.fenster_start }}">
+        </label>
+        <label>Fenster bis (Stunde)
+          <input name="fenster_ende" inputmode="numeric" value="{{ std.fenster_ende }}">
+        </label>
+        <button class="btn" type="submit">Neu berechnen</button>
+      </form>
+    </details>
+  </section>
+
+  <div id="ergebnis"></div>
+
+  <section class="card" id="guete-karte" hidden>
+    <h2 class="guete-titel">Prognosegüte</h2>
+    <div id="guete-warnung"></div>
+    <div class="guete-tabelle" id="guete-tabelle"></div>
+    <div class="meta" id="guete-fuss"></div>
+  </section>
+
+  <p class="hinweis">
+    Die ersten Tage nutzen verbindliche Spotpreise (EPEX). Danach schätzt ein eigenes Wettermodell
+    (Wind, Solar, Tageszeit) die Preise; der typische Fehler steht oben.
+    Alle Angaben ohne Gewähr – die Abrechnung erfolgt nach deinem Tarif.
+  </p>
+</main>
+
+<script>
+  const ergebnis = document.getElementById("ergebnis");
+  const form = document.getElementById("form");
+  const btn = form.querySelector("button");
+
+  const fmt = (n, d = 2) => Number(n).toLocaleString("de-DE", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function zeigeFehler(text) {
+    ergebnis.innerHTML = `<div class="fehler">${esc(text)}</div>`;
+  }
+
+  function render(d) {
+    const p = d.parameter;
+    const naechte = d.naechte.map(n => {
+      const bloecke = n.ladebloecke.length
+        ? `<div class="bloecke">${n.ladebloecke.map(b =>
+            `<span class="block">${esc(b.von)}–${esc(b.bis)} · ${fmt(b.stunden, 1)} h</span>`).join("")}</div>`
+        : `<div class="leer">Keine Stunde unter ${fmt(p.preisgrenze_ct, 1)} ct – heute nicht laden.</div>`;
+      const preis = n.schnitt_brutto_ct !== null ? `${fmt(n.schnitt_brutto_ct, 1)} ct` : "–";
+      return `
+        <article class="card nacht">
+          <div class="nacht-kopf">
+            <h2>${esc(n.label)}</h2>
+            <span class="badge">${esc(n.datenbasis)}</span>
+          </div>
+          <div class="kpis">
+            <span><b>${fmt(n.ladbar_kwh, 1)}</b> kWh</span>
+            <span><b>${fmt(n.stunden_guenstig, 1)}</b> h</span>
+            <span>Ø <b>${preis}</b></span>
+            <span><b>${fmt(n.kosten_eur)}</b> €</span>
+          </div>
+          ${bloecke}
+        </article>`;
+    }).join("");
+
+    ergebnis.innerHTML = `
+      <section class="card">
+        <div class="summary">
+          <div><div class="wert">${fmt(d.gesamt.kwh, 1)}</div><div class="lbl">kWh gesamt</div></div>
+          <div><div class="wert">${fmt(d.gesamt.stunden, 1)} h</div><div class="lbl">Ladezeit</div></div>
+          <div><div class="wert">${fmt(d.gesamt.kosten_eur)} €</div><div class="lbl">Kosten ca.</div></div>
+        </div>
+        <div class="meta">
+          Fenster ${p.fenster_start}–${p.fenster_ende} Uhr · &lt; ${fmt(p.preisgrenze_ct, 1)} ct brutto
+          (≙ ${fmt(p.max_spot_netto_ct, 2)} ct Börse netto) · ${fmt(p.ladeleistung_kw, 1)} kW<br>
+          Stand: ${esc(d.erstellt)} · Intervall ${fmt(d.intervall_min, 0)} Min.
+        </div>
+        <div class="meta">
+          ${d.modell.aktiv
+            ? `Wettermodell aktiv · typischer Fehler ±${fmt(d.modell.fehler_brutto_ct, 1)} ct brutto
+               (ohne Wetter: ±${fmt(d.modell.fehler_ohne_wetter_brutto_ct, 1)} ct)`
+            : `Wettermodell nicht verfügbar (${esc(d.modell.fehler || "")}) – Näherung wird genutzt`}
+        </div>
+      </section>
+      ${naechte}`;
+  }
+
+  async function lade() {
+    const params = new URLSearchParams(new FormData(form));
+    btn.disabled = true;
+    ergebnis.innerHTML = `<div class="spinner">Lade Strompreise …</div>`;
+    try {
+      const resp = await fetch(`api/plan?${params}`, { cache: "no-store" });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.fehler || `Fehler ${resp.status}`);
+      render(data);
+    } catch (e) {
+      zeigeFehler(e.message || "Unbekannter Fehler");
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    document.getElementById("einstellungen").open = false;
+    lade();
+  });
+
+  async function ladeGuete() {
+    const karte = document.getElementById("guete-karte");
+    try {
+      const resp = await fetch("api/guete", { cache: "no-store" });
+      const g = await resp.json();
+      karte.hidden = false;
+
+      const warnHtml = g.warnungen.length
+        ? `<div class="warnung"><b>Starke Abweichung</b><ul>${g.warnungen.map(w => `<li>${esc(w)}</li>`).join("")}</ul></div>`
+        : "";
+      document.getElementById("guete-warnung").innerHTML = warnHtml;
+
+      const zeilen = Object.entries(g.fenster).map(([name, k]) => {
+        if (k.mae_brutto_ct === null) {
+          return `<tr><td>${esc(name)}</td><td colspan="3" class="teil">noch keine Daten</td></tr>`;
+        }
+        const teil = k.vollstaendig ? "" : `<div class="teil">nur ${k.tage_mit_daten} Tage</div>`;
+        const bias = (k.bias_brutto_ct > 0 ? "+" : "") + fmt(k.bias_brutto_ct, 1);
+        return `<tr><td>${esc(name)}${teil}</td>
+          <td><b>${fmt(k.mae_brutto_ct, 1)}</b> ct</td>
+          <td>${bias} ct</td>
+          <td>${k.korrelation !== null ? fmt(k.korrelation, 2) : "–"}</td></tr>`;
+      }).join("");
+      document.getElementById("guete-tabelle").innerHTML = `
+        <table>
+          <thead><tr><th>Zeitraum</th><th>Ø Fehler</th><th>Bias</th><th>Korr.</th></tr></thead>
+          <tbody>${zeilen}</tbody>
+        </table>`;
+      document.getElementById("guete-fuss").innerHTML =
+        `Fehler in ct/kWh brutto. Bias &lt; 0 = Modell schätzt zu niedrig.` +
+        (g.datenbasis_seit ? ` Daten seit ${esc(g.datenbasis_seit)}.` : " Noch keine Vergleichsdaten.") +
+        `<br>Warnung ab ${g.grenzen.mae_7t} ct Ø (7 Tage), ${g.grenzen.bias_7t} ct Bias oder ${g.grenzen.tag} ct an einem Tag.`;
+    } catch (e) {
+      karte.hidden = true;
+    }
+  }
+
+  lade();
+  ladeGuete();
+</script>
+</body>
+</html>
