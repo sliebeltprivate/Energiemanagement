@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Aktualisiert die Ladeplanung auf dem Raspberry Pi (oder einem anderen Gerät).
+# Aktualisiert die Ladeplanung auf dem Linux-Rechner.
 # Holt den neuesten Stand aus GitHub, aktualisiert die Pakete und startet die Webapp neu.
 # Datenbank und Cache bleiben unverändert (siehe .gitignore).
 set -euo pipefail
@@ -13,6 +13,10 @@ echo "==> Aktualisiere Python-Pakete"
 .venv/bin/pip install -q -r requirements.txt
 
 echo "==> Starte Webapp neu"
-sudo systemctl restart ladeplanung-web.service
+if [ "$(id -u)" -eq 0 ]; then
+  systemctl restart ladeplanung-web.service
+else
+  sudo systemctl restart ladeplanung-web.service
+fi
 
 echo "==> Fertig: $(git log -1 --oneline)"

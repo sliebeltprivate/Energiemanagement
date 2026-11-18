@@ -5,9 +5,9 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=pi
-WorkingDirectory=/home/pi/Energiemanagement
-ExecStart=/home/pi/Energiemanagement/.venv/bin/python app.py --host 0.0.0.0 --port 5055
+User=root
+WorkingDirectory=/opt/energiemanagement
+ExecStart=/opt/energiemanagement/.venv/bin/python app.py --host 0.0.0.0 --port 5055
 Restart=on-failure
 RestartSec=10
 

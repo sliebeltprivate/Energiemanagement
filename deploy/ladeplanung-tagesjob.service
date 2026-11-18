@@ -5,6 +5,6 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-User=pi
-WorkingDirectory=/home/pi/Energiemanagement
-ExecStart=/home/pi/Energiemanagement/.venv/bin/python tagesjob.py
+User=root
+WorkingDirectory=/opt/energiemanagement
+ExecStart=/opt/energiemanagement/.venv/bin/python tagesjob.py
