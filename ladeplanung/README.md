@@ -111,3 +111,16 @@ Voraussetzung: Der Mac ist um 15:00 eingeschaltet (läuft er nicht, holt launchd
 | `app.py` | Webserver (Flask) mit API `/api/plan` |
 | `templates/index.html` | Oberfläche für Mac und iPhone |
 | `requirements.txt` | Python-Pakete |
+
+## Installation als Home-Assistant-Add-on
+
+Das Add-on läuft auf Home Assistant OS, Daten bleiben im Add-on-Datenordner (`/data`) erhalten.
+
+1. Home Assistant → **Einstellungen → Add-ons → Add-on-Store → ⋮ → Repositories**
+2. Repository-URL eintragen: `https://github.com/sliebeltprivate/Energiemanagement`
+3. Add-on **Ladeplanung** installieren und starten.
+4. Die Oberfläche erscheint in der Seitenleiste (Ingress) oder direkt unter `http://<IP>:5055`.
+
+Hinweis: Home Assistant lädt Repositories ohne Anmeldung. Das Repository muss dafür **öffentlich** sein.
+
+Updates: Nach einer Änderung im Repository erhöht man `version` in `config.yaml`. Dann zeigt Home Assistant ein Update an.

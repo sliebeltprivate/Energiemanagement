@@ -1,14 +1,8 @@
-# Python
 __pycache__/
 *.pyc
 .venv/
-
-# Lokale Daten (bleiben auf dem Gerät, nicht im Repository)
 prognose_log.sqlite
 daten/
 warnungen.log
-tagesjob.log
 *.log
-
-# macOS
 .DS_Store

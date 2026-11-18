@@ -11,6 +11,7 @@ Alle Fehler in ct/kWh brutto (netto × 1,19 MwSt.), damit sie zur Ladeplanung pa
 
 from __future__ import annotations
 
+import os
 import sqlite3
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -18,11 +19,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from prognose import TZ
+from prognose import TZ, DATA_DIR
 
-HIER = Path(__file__).resolve().parent
-DB = HIER / "prognose_log.sqlite"
-WARN_LOG = HIER / "warnungen.log"
+DB = DATA_DIR / "prognose_log.sqlite"
+WARN_LOG = DATA_DIR / "warnungen.log"
 
 MWST = 1.19
 FENSTER = [("7 Tage", 7), ("1 Monat", 30), ("6 Monate", 182), ("1 Jahr", 365)]

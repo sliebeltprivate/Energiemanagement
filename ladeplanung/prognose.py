@@ -14,6 +14,7 @@ Die Koeffizienten liegen in modell.json (erzeugt von train.py).
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -25,7 +26,8 @@ import requests
 TZ = ZoneInfo("Europe/Berlin")
 HIER = Path(__file__).resolve().parent
 MODELL_DATEI = HIER / "modell.json"
-CACHE_DIR = HIER / "daten"
+DATA_DIR = Path(os.environ.get("LADEPLANUNG_DATA", HIER))  # /data im Add-on
+CACHE_DIR = DATA_DIR / "daten"
 
 # Wetter-Standorte, verteilt über Wind- und Solargebiete Deutschlands
 STANDORTE = {
@@ -106,9 +108,9 @@ def hole_wetter_prognose() -> pd.DataFrame:
 def hole_wetter_historie(start: str, ende: str) -> pd.DataFrame:
     """Stündliches Wetter aus dem Archiv (für Training). Ergebnis wird gecacht."""
     CACHE_DIR.mkdir(exist_ok=True)
-    cache = CACHE_DIR / f"wetter_{start}_{ende}.parquet"
+    cache = CACHE_DIR / f"wetter_{start}_{ende}.pkl"
     if cache.exists():
-        return pd.read_parquet(cache)
+        return pd.read_pickle(cache)
 
     frames = []
     for name, (lat, lon) in STANDORTE.items():
@@ -128,7 +130,7 @@ def hole_wetter_historie(start: str, ende: str) -> pd.DataFrame:
         frames.append(df)
 
     mittel = _mittel_aller_standorte(frames)
-    mittel.to_parquet(cache)
+    mittel.to_pickle(cache)
     return mittel
 
 
