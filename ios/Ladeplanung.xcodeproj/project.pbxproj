@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A89E8EDC2166BCF7823CB96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D372C75939ADDF943073D236 /* Assets.xcassets */; };
 		78976CED6B6231F47162D042 /* Modelle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BCC0F0176A3B871F2E067E /* Modelle.swift */; };
 		B282F63ED3EF60356ACBCA8F /* EinstellungenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E9C581FE933E008E9FEE8E /* EinstellungenView.swift */; };
 		BE921FD7169E59A411166B98 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6201B03C9E7F633556C19779 /* API.swift */; };
@@ -20,6 +21,7 @@
 		4AD39C52D4D5C69D4C654C35 /* UebersichtView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UebersichtView.swift; sourceTree = "<group>"; };
 		6201B03C9E7F633556C19779 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		75EC4C20810F4EA8ED271DE9 /* Ladeplanung.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Ladeplanung.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D372C75939ADDF943073D236 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8E9C581FE933E008E9FEE8E /* EinstellungenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EinstellungenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -36,6 +38,7 @@
 			isa = PBXGroup;
 			children = (
 				6201B03C9E7F633556C19779 /* API.swift */,
+				D372C75939ADDF943073D236 /* Assets.xcassets */,
 				D8E9C581FE933E008E9FEE8E /* EinstellungenView.swift */,
 				050C9CEABF8282BDC3B41E11 /* LadeplanungApp.swift */,
 				14BCC0F0176A3B871F2E067E /* Modelle.swift */,
@@ -60,6 +63,7 @@
 			buildConfigurationList = 10B51C923575A4F57FC7E1AA /* Build configuration list for PBXNativeTarget "Ladeplanung" */;
 			buildPhases = (
 				2A14629C7866F6E0B97C9725 /* Sources */,
+				5EBA9F2483206D057B371B95 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -105,6 +109,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		5EBA9F2483206D057B371B95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2A89E8EDC2166BCF7823CB96 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2A14629C7866F6E0B97C9725 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -125,6 +140,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -212,6 +228,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
