@@ -27,19 +27,20 @@ def _zahl(name: str, typ, standard):
 
 @app.get("/")
 def index():
-    return render_template("index.html", std=STANDARD)
+    return render_template("index.html", std={**STANDARD, **bm.planparameter(bm.lade_einstellungen())})
 
 
 @app.get("/api/plan")
 def api_plan():
+    gespeichert = bm.planparameter(bm.lade_einstellungen())
     try:
         parameter = {
-            "ladeleistung_kw": _zahl("ladeleistung_kw", float, STANDARD["ladeleistung_kw"]),
-            "preisgrenze_ct": _zahl("preisgrenze_ct", float, STANDARD["preisgrenze_ct"]),
-            "sockel_ct": _zahl("sockel_ct", float, STANDARD["sockel_ct"]),
-            "fenster_start": _zahl("fenster_start", int, STANDARD["fenster_start"]),
-            "fenster_ende": _zahl("fenster_ende", int, STANDARD["fenster_ende"]),
-            "tage": _zahl("tage", int, STANDARD["tage"]),
+            "ladeleistung_kw": _zahl("ladeleistung_kw", float, gespeichert["ladeleistung_kw"]),
+            "preisgrenze_ct": _zahl("preisgrenze_ct", float, gespeichert["preisgrenze_ct"]),
+            "sockel_ct": _zahl("sockel_ct", float, gespeichert["sockel_ct"]),
+            "fenster_start": _zahl("fenster_start", int, gespeichert["fenster_start"]),
+            "fenster_ende": _zahl("fenster_ende", int, gespeichert["fenster_ende"]),
+            "tage": _zahl("tage", int, gespeichert["tage"]),
         }
     except ValueError:
         return jsonify(fehler="Ungültige Eingabe – bitte nur Zahlen verwenden."), 400
