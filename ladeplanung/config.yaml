@@ -1,5 +1,5 @@
 name: Ladeplanung
-version: "1.0.10"
+version: "1.1.0"
 slug: ladeplanung
 description: Günstigste Ladefenster und Prognosegüte für die Wallbox
 arch:
@@ -9,6 +9,7 @@ startup: application
 boot: auto
 init: false
 ingress: true
+homeassistant_api: true
 ingress_port: 5055
 panel_icon: mdi:ev-station
 panel_title: Ladeplanung

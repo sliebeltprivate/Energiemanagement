@@ -8,9 +8,12 @@ from __future__ import annotations
 
 import argparse
 
+import requests
+
 from flask import Flask, jsonify, render_template, request
 
 from planer import DatenFehler, STANDARD, berechne_plan
+import benachrichtigung as bm
 
 app = Flask(__name__)
 
@@ -54,6 +57,42 @@ def api_plan():
         return jsonify(fehler=str(exc)), 502
 
 
+@app.get("/api/einstellungen")
+def api_einstellungen_lesen():
+    return jsonify(bm.lade_einstellungen())
+
+
+@app.post("/api/einstellungen")
+def api_einstellungen_speichern():
+    daten = request.get_json(silent=True) or {}
+    try:
+        return jsonify(bm.speichere_einstellungen(daten))
+    except bm.EinstellungsFehler as exc:
+        return jsonify(fehler=str(exc)), 400
+
+
+@app.get("/api/entscheidung")
+def api_entscheidung():
+    try:
+        erg = bm.entscheidung()
+    except DatenFehler as exc:
+        return jsonify(fehler=str(exc)), 502
+    erg.pop("plan", None)
+    return jsonify(erg)
+
+
+@app.post("/api/benachrichtigung/test")
+def api_test():
+    einst = bm.lade_einstellungen()
+    if not einst["notify_dienst"]:
+        return jsonify(fehler="Bitte zuerst einen Benachrichtigungsdienst eintragen."), 400
+    try:
+        bm.sende("Ladeplanung – Test", "Die Benachrichtigung funktioniert.", einst["notify_dienst"])
+    except (RuntimeError, requests.RequestException) as exc:
+        return jsonify(fehler=str(exc)), 502
+    return jsonify(ok=True)
+
+
 @app.get("/api/guete")
 def api_guete():
     """Prognosegüte aus der lokalen Datenbank (kein externer Abruf)."""
@@ -66,6 +105,7 @@ def main() -> None:
     parser.add_argument("--host", default="0.0.0.0", help="0.0.0.0 = auch im WLAN erreichbar")
     parser.add_argument("--port", type=int, default=5055)
     args = parser.parse_args()
+    bm.starte_hintergrund()
     app.run(host=args.host, port=args.port, debug=False)
 
 
